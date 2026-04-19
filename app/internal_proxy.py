@@ -12,6 +12,9 @@ from typing import Optional, Dict, Any
 INTERNAL_SERVICE_URL = os.environ.get("INTERNAL_SERVICE_URL", "http://localhost:8080")
 INTERNAL_SERVICE_TOKEN = os.environ.get("INTERNAL_SERVICE_TOKEN", "")
 
+# Internal API prefix for the Go service
+INTERNAL_API_PREFIX = "/api/v1/internal"
+
 class InternalProxyService:
     """
     Service to proxy requests to internal pipeline service.
@@ -87,37 +90,37 @@ class InternalProxyService:
     # Pipeline execution endpoints
     async def execute_pipeline(self, workflow_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a pipeline workflow."""
-        return await self.forward_post("/pipeline/execute", workflow_data)
+        return await self.forward_post(f"{INTERNAL_API_PREFIX}/pipeline/execute", workflow_data)
     
     async def get_execution_list(self, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get list of pipeline executions."""
-        return await self.forward_get("/pipeline/executions", params)
+        return await self.forward_get(f"{INTERNAL_API_PREFIX}/pipeline/executions", params)
     
     async def get_execution_detail(self, execution_id: str) -> Dict[str, Any]:
         """Get detail of a specific execution."""
-        return await self.forward_get(f"/pipeline/executions/{execution_id}")
+        return await self.forward_get(f"{INTERNAL_API_PREFIX}/pipeline/executions/{execution_id}")
     
     async def cancel_execution(self, execution_id: str) -> Dict[str, Any]:
         """Cancel a running execution."""
-        return await self.forward_post(f"/pipeline/executions/{execution_id}/cancel")
+        return await self.forward_post(f"{INTERNAL_API_PREFIX}/pipeline/executions/{execution_id}/cancel")
     
     async def get_execution_status(self, execution_id: str) -> Dict[str, Any]:
         """Get execution status."""
-        return await self.forward_get(f"/pipeline/executions/{execution_id}/status")
+        return await self.forward_get(f"{INTERNAL_API_PREFIX}/pipeline/executions/{execution_id}/status")
     
     # Pipeline management endpoints
     async def get_pipeline_detail(self, pipeline_id: str) -> Dict[str, Any]:
         """Get pipeline detail."""
-        return await self.forward_get(f"/pipeline/{pipeline_id}")
+        return await self.forward_get(f"{INTERNAL_API_PREFIX}/pipeline/{pipeline_id}")
     
     async def save_pipeline(self, pipeline_data: Dict[str, Any]) -> Dict[str, Any]:
         """Save a pipeline (create or update)."""
-        return await self.forward_post("/pipeline/save", pipeline_data)
+        return await self.forward_post(f"{INTERNAL_API_PREFIX}/pipeline/save", pipeline_data)
     
     # Task queue endpoints
     async def get_task_queue(self) -> Dict[str, Any]:
         """Get task queue list."""
-        return await self.forward_get("/task_queue")
+        return await self.forward_get(f"{INTERNAL_API_PREFIX}/task_queue")
 
 
 # Global instance
