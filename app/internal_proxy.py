@@ -121,14 +121,15 @@ class InternalProxyService:
 
 
 # Global instance
-internal_proxy: Optional[InternalProxyService] = None
+_internal_proxy: Optional[InternalProxyService] = None
 
 
 def get_internal_proxy() -> InternalProxyService:
     """Get the global internal proxy instance."""
-    if internal_proxy is None:
-        internal_proxy = InternalProxyService()
-    return internal_proxy
+    global _internal_proxy
+    if _internal_proxy is None:
+        _internal_proxy = InternalProxyService()
+    return _internal_proxy
 
 
 async def setup_internal_proxy():
